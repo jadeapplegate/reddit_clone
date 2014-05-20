@@ -2,8 +2,11 @@ class PostsController < ApplicationController
 
 def index
     @posts = Post.all
+      respond_to do |f|
+        f.json { render :json => @posts, :only => [:id, :title, :author, :text]}
+      end
     @user = current_user
-  end
+end
 
   def new
     @post = Post.new

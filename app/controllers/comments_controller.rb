@@ -1,10 +1,11 @@
 class CommentsController < ApplicationController
 
-  before_filter :load_post
+  before_filter :load_post, :authenticate_user! only: [:new, :create, :destroy]
+
   
   def index
     @comments = @post.comments.all
-    @user = current_user
+    # @user = current_user
   end
 
   def show
@@ -18,6 +19,7 @@ class CommentsController < ApplicationController
 
   def create
     @comment = @post.comments.new(comment_params)
+    @comment.user_id = current_user.id
     if @comment.save
       redirect_to post_comments_path(@post)
     else
